@@ -1,4 +1,4 @@
-# Based on https://github.com/istio/pilot/blob/master/docker/debug/Dockerfile
+# Based on https://github.com/istio/pilot/blob/pilot-0-2-0-working/docker/debug/Dockerfile
 # Build linkerd inject image
 #
 #  docker build -t buoyantio/istio-init:v1 .

@@ -24,8 +24,8 @@ import (
 	via iptables rules which send traffic to daemonset linkerd
 
 	This file based on:
-	https://github.com/istio/pilot/blob/master/platform/kube/inject/inject.go
-	and https://github.com/istio/pilot/tree/master/cmd/istioctl/inject.go
+	https://github.com/istio/pilot/blob/pilot-0-2-0-working/platform/kube/inject/inject.go
+	and https://github.com/istio/pilot/blob/pilot-0-2-0-working/cmd/istioctl/inject.go
 
   This code inserts the following into the pod specs:
 
@@ -62,7 +62,7 @@ func dieIf(err error) {
 }
 
 func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
-	// from https://github.com/istio/pilot/blob/master/platform/kube/inject/inject.go
+	// from https://github.com/istio/pilot/blob/pilot-0-2-0-working/platform/kube/inject/inject.go
 
 	if t.Annotations == nil {
 		t.Annotations = make(map[string]string)
@@ -192,7 +192,7 @@ func intoResourceFile(p *Params, in io.Reader, out io.Writer) error {
 }
 
 func main() {
-	// from https://github.com/istio/pilot/tree/master/cmd/istioctl/inject.go
+	// from https://github.com/istio/pilot/blob/pilot-0-2-0-working/cmd/istioctl/inject.go
 	inputFile := flag.String("f", "", "Input Kubernetes resource filename")
 	outputFile := flag.String("o", "", "Modified output Kubernetes resource filename")
 	linkerdPort := flag.String("linkerdPort", "4140", "linkerd daemonset port which will handle outgoing requests")

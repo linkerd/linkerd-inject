@@ -1,6 +1,6 @@
 #!/bin/bash
 # Linkerd initialization script responsible for setting up port forwarding.
-# Based on: https://github.com/istio/pilot/blob/master/docker/prepare_proxy.sh
+# Based on: https://github.com/istio/pilot/blob/pilot-0-2-0-working/docker/prepare_proxy.sh
 
 set -o errexit
 set -o nounset

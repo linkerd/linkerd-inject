@@ -31,12 +31,12 @@ initContainers:
 ```
 
 It is based on Istio's method of
-[injecting sidecars](https://github.com/istio/pilot/blob/master/doc/proxy-injection.md),
+[injecting sidecars](https://github.com/istio/pilot/blob/pilot-0-2-0-working/doc/proxy-injection.md),
 Ideally this code would go somewhere with the istioctl code, and reuse that code
 more directly, but this seems to be in transit right now. This `prepare_proxy.sh`
 sets up iptables rules for transparently proxying requests to a Daemonset linkerd
 (rather than a sidecar proxy, which Istio
-[currently uses](https://github.com/istio/pilot/blob/master/docker/prepare_proxy.sh)).
+[currently uses](https://github.com/istio/pilot/blob/pilot-0-2-0-working/docker/prepare_proxy.sh)).
 
 ## Usage
 
