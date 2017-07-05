@@ -14,10 +14,10 @@ from `world-v1` to `world`.
 
 $ kubectl apply -f https://raw.githubusercontent.com/linkerd/linkerd-examples/master/k8s-daemonset/k8s/linkerd.yml
 
-# Modify and deploy the helloworld config
+# Modify and deploy the Hello World app config
 
 $ LINKERD_PORT=4140
-$ kubectl apply -f <(inject -f helloworld.yaml -linkerdPort $LINKERD_PORT)
+$ kubectl apply -f <(inject -f hello-world.yml -linkerdPort $LINKERD_PORT)
 
 # Test it out!
 

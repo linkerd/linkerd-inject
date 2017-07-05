@@ -1,8 +1,8 @@
 # Based on https://github.com/istio/pilot/blob/pilot-0-2-0-working/docker/debug/Dockerfile
 # Build linkerd inject image
 #
-#  docker build -t buoyantio/istio-init:v1 .
-#  docker push buoyantio/istio-init:v1
+#  docker build -t linkerd/istio-init:v1 .
+#  docker push linkerd/istio-init:v1
 
 FROM ubuntu:xenial
 RUN apt-get update && \

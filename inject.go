@@ -29,25 +29,30 @@ import (
 
   This code inserts the following into the pod specs:
 
-   spec:
-     initContainers:
-       - name: init
-         image: buoyantio/istio-init:v1
-         args:
-           - -p
-           - "4140"
-         imagePullPolicy: Always
-         securityContext:
-           capabilities:
-             add:
-             - NET_ADMIN
+	spec:
+		initContainers:
+		- name: init
+		  image: buoyantio/istio-init:v1
+		  env:
+		  - name: NODE_NAME
+		    valueFrom:
+		      fieldRef:
+		        fieldPath: spec.nodeName
+		  args:
+		    - -p
+		    - "4140" # port of the Daemonset linkerd's incoming router
+		  imagePullPolicy: Always
+		  securityContext:
+		    capabilities:
+		      add:
+		      - NET_ADMIN
 */
 
 const (
 	istioSidecarAnnotationSidecarKey   = "alpha.istio.io/linkerd-daemonset"
 	istioSidecarAnnotationSidecarValue = "injected"
 	initContainerName                  = "init-linkerd"
-	initImage                          = "buoyantio/istio-init:v1"
+	initImage                          = "linkerd/istio-init:v1"
 )
 
 type Params struct {

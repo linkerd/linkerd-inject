@@ -44,8 +44,8 @@ sets up iptables rules for transparently proxying requests to a Daemonset linker
 go install
 
 # Inject init container into your yaml and apply
-kubectl apply -f <(inject -f example/helloworld.yaml -linkerdPort 4140)
+kubectl apply -f <(inject -f example/hello-world.yml -linkerdPort 4140)
 
 # See output of script before applying
-inject -f example/helloworld.yaml -o result.yml -linkerdPort 4140
+inject -f example/hello-world.yml -o result.yml -linkerdPort 4140
 ```
