@@ -40,7 +40,7 @@ iptables -t nat -A OUTPUT -d 127.0.0.1/32 -j RETURN                             
 
 if [ "$RUN_IN_MINIKUBE" = true ]; then
   # Forward traffic to the linkerd service VIP on the single minikube node
-  iptables -t nat -A OUTPUT -p tcp -j DNAT --to ${L5D_SERVICE_HOST}:${LINKERD_PORT}         -m comment --comment "istio/dnat-to-daemonset-l5d"
+  iptables -t nat -A OUTPUT -p tcp -j DNAT --to ${L5D_SERVICE_HOST}:${LINKERD_PORT}         -m comment --comment "istio/dnat-to-minikube-l5d"
 else
   # iptables doesn't like hostnames with dashes, resolve the host ip here
   # in kubernetes 1.7, can get hostIp via downward api

@@ -43,7 +43,7 @@ sets up iptables rules for transparently proxying requests to a Daemonset linker
 ```
 go install
 
-# Inject init container into your yaml and apply
+# Inject init container into your yaml and apply (see example/README.md for minikube instructions)
 kubectl apply -f <(inject -f example/hello-world.yml -linkerdPort 4140)
 
 # See output of script before applying

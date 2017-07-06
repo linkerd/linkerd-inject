@@ -34,6 +34,6 @@ Deploy the linkerd Daemonset as above, and then use:
 $ LINKERD_PORT=4140
 $ kubectl apply -f <(inject -f hello-world.yml -linkerdPort $LINKERD_PORT -runInMinikube)
 
-L5D_PORT=$(kubectl get svc l5d -o jsonpath="{.spec.ports[0].nodePort}")
-curl -v $(minikube ip):$L5D_PORT -H "Host: hello"
+$ L5D_NODE_PORT=$(kubectl get svc l5d -o jsonpath="{.spec.ports[0].nodePort}")
+$ curl -v $(minikube ip):$L5D_NODE_PORT -H "Host: hello"
 ```
