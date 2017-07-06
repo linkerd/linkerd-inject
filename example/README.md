@@ -2,6 +2,7 @@
 
 Example deployment using Daemonset linkerd and transparent proxying using our
 [hello world example](https://github.com/linkerd/linkerd-examples/tree/master/docker/helloworld).
+For [minikube](https://github.com/kubernetes/minikube) instructions, see below.
 
 You'll notice that unlike our previous
 [hello world](https://github.com/linkerd/linkerd-examples/blob/master/k8s-daemonset/k8s/hello-world.yml) or
@@ -24,4 +25,15 @@ $ kubectl apply -f <(inject -f hello-world.yml -linkerdPort $LINKERD_PORT)
 $ INGRESS_LB=$(kubectl get svc l5d -o jsonpath="{.status.loadBalancer.ingress[0].*}")
 $ curl $INGRESS_LB:$LINKERD_PORT -H "Host: hello"
 Hello (10.196.2.94) world (10.196.0.26)!!
+```
+
+## Running in minikube
+
+Deploy the linkerd Daemonset as above, and then use:
+```
+$ LINKERD_PORT=4140
+$ kubectl apply -f <(inject -f hello-world.yml -linkerdPort $LINKERD_PORT -runInMinikube)
+
+L5D_PORT=$(kubectl get svc l5d -o jsonpath="{.spec.ports[0].nodePort}")
+curl -v $(minikube ip):$L5D_PORT -H "Host: hello"
 ```

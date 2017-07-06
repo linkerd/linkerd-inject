@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 
 	"github.com/ghodss/yaml"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -57,6 +58,7 @@ const (
 
 type Params struct {
 	LinkerdDaemonsetPort string
+	RunInMinikube        bool
 }
 
 func dieIf(err error) {
@@ -86,12 +88,14 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 	}
 	initArgs := []string{
 		"-p", p.LinkerdDaemonsetPort,
+		"-m", strconv.FormatBool(p.RunInMinikube),
 	}
-	annotations = append(annotations, map[string]interface{}{
-		"name":            initContainerName,
-		"image":           initImage,
-		"args":            initArgs,
-		"imagePullPolicy": "Always",
+
+	initContainerAnnotations := map[string]interface{}{
+		"name":  initContainerName,
+		"image": initImage,
+		"args":  initArgs,
+
 		"env": []map[string]interface{}{
 			map[string]interface{}{
 				"name": "NODE_NAME",
@@ -108,7 +112,13 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 				"add": []string{"NET_ADMIN"},
 			},
 		},
-	})
+	}
+
+	if !p.RunInMinikube {
+		initContainerAnnotations["imagePullPolicy"] = "Always"
+	}
+
+	annotations = append(annotations, initContainerAnnotations)
 
 	initAnnotationValue, err := json.Marshal(&annotations)
 	if err != nil {
@@ -201,6 +211,7 @@ func main() {
 	inputFile := flag.String("f", "", "Input Kubernetes resource filename")
 	outputFile := flag.String("o", "", "Modified output Kubernetes resource filename")
 	linkerdPort := flag.String("linkerdPort", "4140", "linkerd daemonset port which will handle outgoing requests")
+	runInMinikube := flag.Bool("runInMinikube", false, "run in minikube")
 
 	flag.Parse()
 	var err error
@@ -234,6 +245,7 @@ func main() {
 
 	params := &Params{
 		LinkerdDaemonsetPort: *linkerdPort,
+		RunInMinikube:        *runInMinikube,
 	}
 
 	intoResourceFile(params, reader, writer)
