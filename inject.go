@@ -31,8 +31,8 @@ import (
 
 	spec:
 		initContainers:
-		- name: init
-		  image: buoyantio/istio-init:v1
+		- name: init-linkerd
+		  image: linkerd/istio-init:v1
 		  env:
 		  - name: NODE_NAME
 		    valueFrom:
