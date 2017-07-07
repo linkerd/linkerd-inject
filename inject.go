@@ -131,6 +131,7 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 }
 
 func intoResourceFile(p *Params, in io.Reader, out io.Writer) error {
+	// from https://github.com/istio/pilot/blob/pilot-0-2-0-working/platform/kube/inject/inject.go
 	reader := yamlDecoder.NewYAMLReader(bufio.NewReaderSize(in, 4096))
 
 	for {
