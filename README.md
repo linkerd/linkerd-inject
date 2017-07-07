@@ -23,7 +23,8 @@ initContainers:
   args:
     - -p
     - "4140" # port of the Daemonset linkerd's incoming router
-  imagePullPolicy: Always
+    - -s
+    - "L5D" # linkerd Daemonset service name, uppercased
   securityContext:
     capabilities:
       add:

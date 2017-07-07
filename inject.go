@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/ghodss/yaml"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,7 +43,8 @@ import (
 		  args:
 		    - -p
 		    - "4140" # port of the Daemonset linkerd's incoming router
-		  imagePullPolicy: Always
+		    - -s
+		    - "L5D" # linkerd Daemonset service name, uppercased
 		  securityContext:
 		    capabilities:
 		      add:
@@ -57,8 +59,9 @@ const (
 )
 
 type Params struct {
-	LinkerdDaemonsetPort string
-	RunInMinikube        bool
+	LinkerdDaemonsetPort    string
+	LinkerdDaemonsetService string
+	UseServiceVip           bool
 }
 
 func dieIf(err error) {
@@ -88,7 +91,8 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 	}
 	initArgs := []string{
 		"-p", p.LinkerdDaemonsetPort,
-		"-m", strconv.FormatBool(p.RunInMinikube),
+		"-m", strconv.FormatBool(p.UseServiceVip),
+		"-s", strings.ToUpper(p.LinkerdDaemonsetService),
 	}
 
 	initContainerAnnotations := map[string]interface{}{
@@ -112,10 +116,6 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 				"add": []string{"NET_ADMIN"},
 			},
 		},
-	}
-
-	if !p.RunInMinikube {
-		initContainerAnnotations["imagePullPolicy"] = "Always"
 	}
 
 	annotations = append(annotations, initContainerAnnotations)
@@ -211,7 +211,8 @@ func main() {
 	inputFile := flag.String("f", "", "Input Kubernetes resource filename")
 	outputFile := flag.String("o", "", "Modified output Kubernetes resource filename")
 	linkerdPort := flag.String("linkerdPort", "4140", "linkerd daemonset port which will handle outgoing requests")
-	runInMinikube := flag.Bool("runInMinikube", false, "run in minikube")
+	useServiceVip := flag.Bool("useServiceVip", false, "for use in k8s envs without downward api access")
+	linkerdSvcName := flag.String("linkerdSvcName", "l5d", "linkerd daemonset service name")
 
 	flag.Parse()
 	var err error
@@ -244,8 +245,9 @@ func main() {
 	}
 
 	params := &Params{
-		LinkerdDaemonsetPort: *linkerdPort,
-		RunInMinikube:        *runInMinikube,
+		LinkerdDaemonsetPort:    *linkerdPort,
+		LinkerdDaemonsetService: *linkerdSvcName,
+		UseServiceVip:           *useServiceVip,
 	}
 
 	intoResourceFile(params, reader, writer)
