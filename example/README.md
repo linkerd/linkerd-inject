@@ -10,9 +10,9 @@ You'll notice that unlike our previous
 we don't have `http_proxy` set. Also note that the service name has been changed
 from `world-v1` to `world`.
 
-(Note that the inject example assumes an incoming linkerd router on port `4140` and
+Note that the inject example assumes an incoming linkerd router on port `4140` and
 that the Daemonset has a service name of `l5d`. If you've changed these, please
-use the `-linkerdPort` and `-linkerdSvcName` flags.)
+use the `-linkerdPort` and `-linkerdSvcName` flags.
 
 Deploy linkerd as a Daemonset:
 ```
@@ -33,6 +33,10 @@ Hello (10.196.2.94) world (10.196.0.26)!!
 ```
 
 ## Running in minikube
+
+To do transparent proxying in environments without downward API access, we'll
+forward traffic to the linkerd service VIP rather than the host IP (assuming
+we're running on a single node).
 
 Deploy the linkerd Daemonset as above, and then use the following commands.
 
