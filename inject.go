@@ -29,6 +29,8 @@ import (
 	https://github.com/istio/pilot/blob/pilot-0-2-0-working/platform/kube/inject/inject.go
 	and https://github.com/istio/pilot/blob/pilot-0-2-0-working/cmd/istioctl/inject.go
 
+	TODO: actually get this code into istio/pilot or rewrite it
+
   This code inserts the following into the pod specs:
 
 	spec:
