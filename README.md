@@ -25,6 +25,8 @@ initContainers:
     - "4140" # port of the Daemonset linkerd's incoming router
     - -s
     - "L5D" # linkerd Daemonset service name, uppercased
+    - -m
+    - "false" # set to true if running in minikube
   securityContext:
     capabilities:
       add:
@@ -32,7 +34,7 @@ initContainers:
 ```
 
 It is based on Istio's method of
-[injecting sidecars](https://github.com/istio/pilot/blob/pilot-0-2-0-working/doc/proxy-injection.md),
+[injecting sidecars](https://github.com/istio/pilot/blob/pilot-0-2-0-working/doc/proxy-injection.md).
 Ideally this code would go somewhere with the istioctl code, and reuse that code
 more directly, but this seems to be in transit right now. This `prepare_proxy.sh`
 sets up iptables rules for transparently proxying requests to a Daemonset linkerd
@@ -41,12 +43,17 @@ sets up iptables rules for transparently proxying requests to a Daemonset linker
 
 ## Usage
 
+Install linkerd-inject
 ```
-go install
+go get github.com/linkerd/linkerd-inject
+```
 
-# Inject init container into your yaml and apply (see example/README.md for minikube instructions)
-kubectl apply -f <(inject -f example/hello-world.yml -linkerdPort 4140)
+Inject init container into your yaml and apply (see [example/](example/README.md) for minikube instructions)
+```
+kubectl apply -f <(linkerd-inject -f example/hello-world.yml -linkerdPort 4140)
+```
 
-# See output of script before applying
-inject -f example/hello-world.yml -o result.yml -linkerdPort 4140
+To see output of script before applying:
+```
+linkerd-inject -f example/hello-world.yml -o result.yml -linkerdPort 4140
 ```

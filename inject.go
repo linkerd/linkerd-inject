@@ -47,6 +47,8 @@ import (
 		    - "4140" # port of the Daemonset linkerd's incoming router
 		    - -s
 		    - "L5D" # linkerd Daemonset service name, uppercased
+		    - -m
+		    - "false" # set to true if running in minikube
 		  securityContext:
 		    capabilities:
 		      add:
