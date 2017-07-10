@@ -49,6 +49,7 @@ import (
 		    - "L5D" # linkerd Daemonset service name, uppercased
 		    - -m
 		    - "false" # set to true if running in minikube
+		  imagePullPolicy: IfNotPresent
 		  securityContext:
 		    capabilities:
 		      add:
@@ -115,6 +116,7 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 				},
 			},
 		},
+		"imagePullPolicy": "IfNotPresent",
 		"securityContext": map[string]interface{}{
 			"capabilities": map[string]interface{}{
 				"add": []string{"NET_ADMIN"},
