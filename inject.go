@@ -255,5 +255,6 @@ func main() {
 		UseServiceVip:           *useServiceVip,
 	}
 
-	intoResourceFile(params, reader, writer)
+	err = intoResourceFile(params, reader, writer)
+	dieIf(err)
 }
