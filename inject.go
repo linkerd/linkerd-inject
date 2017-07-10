@@ -49,6 +49,7 @@ import (
 		    - "L5D" # linkerd Daemonset service name, uppercased
 		    - -m
 		    - "false" # set to true if running in minikube
+		  imagePullPolicy: IfNotPresent
 		  securityContext:
 		    capabilities:
 		      add:
