@@ -32,6 +32,7 @@ initContainers:
     capabilities:
       add:
       - NET_ADMIN
+    privileged: false # set to true for SELinux
 ```
 
 It is based on Istio's method of
@@ -49,7 +50,10 @@ Install linkerd-inject
 go get github.com/linkerd/linkerd-inject
 ```
 
-Inject init container into your yaml and apply (see [example/](example/README.md) for minikube instructions)
+Inject init container into your yaml and apply.
+If you're using minikube, see [example/](example/README.md) for minikube instructions.
+If you're running in OpenShift (SELinux), you'll need to use `-privileged`.
+
 ```
 kubectl apply -f <(linkerd-inject -f example/hello-world.yml -linkerdPort 4140)
 ```
