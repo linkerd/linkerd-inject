@@ -25,6 +25,8 @@ $ LINKERD_PORT=4140
 $ kubectl apply -f <(linkerd-inject -f hello-world.yml -linkerdPort $LINKERD_PORT)
 ```
 
+(If you're running in OpenShift (SELinux), you'll need to use `-privileged`.)
+
 Test it out! Our services now talk to each other using linkerd.
 ```
 $ INGRESS_LB=$(kubectl get svc l5d -o jsonpath="{.status.loadBalancer.ingress[0].*}")

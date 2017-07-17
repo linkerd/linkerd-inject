@@ -54,6 +54,7 @@ import (
 		    capabilities:
 		      add:
 		      - NET_ADMIN
+		    privileged: false # set to true for SELinux
 */
 
 const (
@@ -67,6 +68,7 @@ type Params struct {
 	LinkerdDaemonsetPort    string
 	LinkerdDaemonsetService string
 	UseServiceVip           bool
+	RunInitInPrivileged     bool
 }
 
 func dieIf(err error) {
@@ -121,6 +123,7 @@ func injectIntoPodTemplateSpec(p *Params, t *v1.PodTemplateSpec) error {
 			"capabilities": map[string]interface{}{
 				"add": []string{"NET_ADMIN"},
 			},
+			"privileged": p.RunInitInPrivileged,
 		},
 	}
 
@@ -218,8 +221,9 @@ func main() {
 	inputFile := flag.String("f", "", "Input Kubernetes resource filename")
 	outputFile := flag.String("o", "", "Modified output Kubernetes resource filename")
 	linkerdPort := flag.String("linkerdPort", "4140", "linkerd daemonset port which will handle outgoing requests")
-	useServiceVip := flag.Bool("useServiceVip", false, "for use in k8s envs without downward api access")
 	linkerdSvcName := flag.String("linkerdSvcName", "l5d", "linkerd daemonset service name")
+	useServiceVip := flag.Bool("useServiceVip", false, "for use in k8s envs without downward api access")
+	privileged := flag.Bool("privileged", false, "run initContainer in privileged mode")
 
 	flag.Parse()
 	var err error
@@ -255,6 +259,7 @@ func main() {
 		LinkerdDaemonsetPort:    *linkerdPort,
 		LinkerdDaemonsetService: *linkerdSvcName,
 		UseServiceVip:           *useServiceVip,
+		RunInitInPrivileged:     *privileged,
 	}
 
 	err = intoResourceFile(params, reader, writer)
