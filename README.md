@@ -1,4 +1,4 @@
-# Transparent proxy inection
+# Transparent proxy injection
 
 We can do transparent proxying of requests to linkerd via `iptables` rules.
 
